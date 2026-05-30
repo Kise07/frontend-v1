@@ -23,11 +23,23 @@ class Pipeline(BaseModel):
     nodes: List[Node]
     edges: List[Edge]
 
+def validate_edges(nodes, edges):
+    """Validate that all edges reference valid nodes"""
+    valid_node_ids = {node.id for node in nodes}
+    
+    for edge in edges:
+        if edge.source not in valid_node_ids:
+            return False, f"Invalid source node: {edge.source}"
+        if edge.target not in valid_node_ids:
+            return False, f"Invalid target node: {edge.target}"
+    
+    return True, None
+
 def check_dag(nodes, edges):
+    # Build graph with validated edges
     graph = {node.id: [] for node in nodes}
     for edge in edges:
-        if edge.source in graph:
-            graph[edge.source].append(edge.target)
+        graph[edge.source].append(edge.target)
 
     visited = set()
     rec_stack = set()
@@ -56,8 +68,27 @@ def read_root():
 
 @app.post('/pipelines/parse')
 def parse_pipeline(pipeline: Pipeline):
+    # Step 1: Validate that pipeline is not empty
+    if len(pipeline.nodes) == 0:
+        return {
+            'valid': False,
+            'error': 'Pipeline must contain at least one node'
+        }
+    
+    # Step 2: Validate all edges reference valid nodes
+    is_valid, error_msg = validate_edges(pipeline.nodes, pipeline.edges)
+    if not is_valid:
+        return {
+            'valid': False,
+            'error': error_msg
+        }
+    
+    # Step 3: Check if pipeline is a valid DAG
+    is_valid_dag = check_dag(pipeline.nodes, pipeline.edges)
+    
     return {
+        'valid': True,
         'num_nodes': len(pipeline.nodes),
         'num_edges': len(pipeline.edges),
-        'is_dag': check_dag(pipeline.nodes, pipeline.edges),
+        'is_dag': is_valid_dag,
     }
