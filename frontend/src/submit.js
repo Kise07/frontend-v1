@@ -3,7 +3,8 @@
 import { useStore } from "./store";
 
 export const SubmitButton = () => {
-  const { nodes, edges } = useStore();
+  const nodes = useStore((state) => state.nodes);
+  const edges = useStore((state) => state.edges);
   
   const handleSubmit = async () => {
     // Step 1: Frontend validation - check if pipeline is empty
