@@ -13,6 +13,7 @@ app.add_middleware(
 )
 
 class Node(BaseModel):
+    model_config = {'extra': 'ignore'}
     id: str
 
 class Edge(BaseModel):
