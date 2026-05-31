@@ -46,7 +46,14 @@ export const TextNode = ({ id, data }) => {
         <textarea
           ref={textareaRef}
           value={currText}
-          onChange={(e) => setCurrText(e.target.value)}
+          onChange={(e) => {
+            const val = e.target.value;
+            setCurrText(val);
+            // Extract all {{variable}} matches
+            const matches = [...val.matchAll(/\{\{(\w+)\}\}/g)];
+            const vars = [...new Set(matches.map(m => m[1]))];
+            setVariables(vars);
+          }}
           style={{
             width: '100%',
             resize: 'none',
