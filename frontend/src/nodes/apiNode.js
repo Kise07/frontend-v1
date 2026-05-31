@@ -2,7 +2,7 @@ import { useState } from "react"
 import { BaseNode } from "./baseNode";
 
 export const APINode = ({ id }) => {
-  const [url, setUrl] = useState('https://api/example.com');
+  const [url, setUrl] = useState('https://api.example.com');
   const [method, setMethod] = useState('GET');
   return (
     <BaseNode

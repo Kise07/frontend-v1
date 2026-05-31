@@ -5,7 +5,11 @@ import { Handle, Position } from 'reactflow';
 
 export const TextNode = ({ id, data }) => {
   const [currText, setCurrText] = useState(data?.text || '{{input}}');
-  const [variables, setVariables] = useState([]);
+  const [variables, setVariables] = useState(() => {
+    const initial = data?.text || '{{input}}';
+    const matches = [...initial.matchAll(/\{\{(\w+)\}\}/g)];
+    return [...new Set(matches.map(m => m[1]))];
+  });
   const textareaRef = useRef(null);
 
   useEffect(() => {
@@ -74,7 +78,7 @@ export const TextNode = ({ id, data }) => {
         )}
       </div>
 
-      {/* Dynamix input handles for each {{variable}} */}
+      {/* Dynamic input handles for each {{variable}} */}
       {variables.map((v, i) => (
         <Handle
           key={v}
