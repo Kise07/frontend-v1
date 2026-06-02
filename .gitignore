@@ -1,0 +1,27 @@
+# OS files
+.DS_Store
+.DS_Store?
+*.swp
+*.swo
+*~
+.vscode
+.idea
+
+# Dependencies
+node_modules/
+venv/
+
+# Build artifacts
+build/
+dist/
+*.pyc
+__pycache__/
+.pytest_cache/
+
+# Environment
+.env
+.env.local
+.env.*.local
+Shabaz_Ansari_technical_assessment.zip
+__pycache__/
+*.pyc
