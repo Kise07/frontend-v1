@@ -25,3 +25,4 @@ __pycache__/
 Shabaz_Ansari_technical_assessment.zip
 __pycache__/
 *.pyc
+.DS_Store
